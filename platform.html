@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Platform — ASQIOS</title>
+<meta name="description" content="The ASQIOS platform architecture: four isolated paper portfolios that measure the marginal value of each layer, sitting on an honesty spine of an immutable store, trial ledger, and reproduction harness.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a href="index.html" class="brand">
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#2D5D4F" stroke-width="1.1"><rect x="4" y="4" width="16" height="16"/><rect x="4" y="4" width="16" height="16" transform="rotate(45 12 12)"/><circle cx="12" cy="12" r="3.4"/></g></svg>
+      ASQ<b>IOS</b>
+    </a>
+    <nav class="nav-links" id="navlinks">
+      <a href="index.html">Home</a>
+      <a href="approach.html">Approach</a>
+      <a href="platform.html" class="active">Platform</a>
+      <a href="governance.html">Governance</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="nav-cta">Contact</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">MENU</button>
+  </div>
+</header>
+
+<section class="page-hero">
+  <svg class="ghost-geo" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#10201B" stroke-width="0.6"><circle cx="100" cy="100" r="96"/><rect x="32" y="32" width="136" height="136"/><rect x="32" y="32" width="136" height="136" transform="rotate(45 100 100)"/><circle cx="100" cy="100" r="60"/></g></svg>
+  <div class="wrap">
+    <span class="eyebrow">The platform</span>
+    <h1>An architecture designed to measure its own value.</h1>
+    <p class="lede">Most systems assume their components help. ASQIOS is stacked so the contribution of every layer can be isolated and measured against a control — and so the research integrity infrastructure can never be quietly bypassed.</p>
+  </div>
+</section>
+
+<!-- PORTFOLIO HIERARCHY -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Portfolio hierarchy</span>
+      <h2>Four portfolios. One question each.</h2>
+      <p class="lede">Each portfolio adds exactly one layer to the one before it, so the difference between them is the measurable value of that layer — not a tangle of confounded effects. Tap any portfolio to expand.</p>
+    </div>
+    <div class="port-stack">
+      <div class="port reveal">
+        <span class="code">PORT-A</span><h3>Factor baseline</h3>
+        <p class="role">Pure factor model.</p>
+        <p class="detail">The control. A systematic factor model (STRAT-001) with no AI layer at all. Every other portfolio is measured against this baseline.</p>
+        <div class="toggle">+ DETAIL</div>
+      </div>
+      <div class="port reveal" data-delay="1">
+        <span class="code">PORT-B</span><h3>Factor + veto</h3>
+        <p class="role">Baseline plus an AI veto.</p>
+        <p class="detail">Adds a constrained supervisory veto on top of PORT-A. The question it answers: does an AI veto add value, or destroy it? The veto is engineered to fail closed, never open.</p>
+        <div class="toggle">+ DETAIL</div>
+      </div>
+      <div class="port reveal" data-delay="2">
+        <span class="code">PORT-C</span><h3>AI analyst</h3>
+        <p class="role">A scoring AI analyst (CAA-002).</p>
+        <p class="detail">A fuller analyst that scores names under strict rules: it never excludes on data anomalies, never re-runs the Shariah screen, and never reads routine insider activity as a signal. Exclusions require hard evidence of fraud, insolvency, or going-concern risk.</p>
+        <div class="toggle">+ DETAIL</div>
+      </div>
+      <div class="port reveal" data-delay="3">
+        <span class="code">PORT-D</span><h3>Event monitor</h3>
+        <p class="role">A news-event monitor (NED-002).</p>
+        <p class="detail">Tests which event type carries edge — earnings surprise, insider pattern, contract award — not whether a data source does. Each hypothesis must meet its own sample size and survive its own multiple-testing correction.</p>
+        <div class="toggle">+ DETAIL</div>
+      </div>
+    </div>
+    <p class="port-legend reveal">// A data source is a transport channel, not a factor. Summing signals across independent hypotheses multiplies the testing burden rather than reducing it.</p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- HONESTY SPINE -->
+<section class="dark">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The honesty spine</span>
+      <h2>The cage is built before the capability.</h2>
+      <p class="lede">Three pieces of infrastructure sit beneath all research. They are deliberately small, deliberately rigid, and non-negotiable — the part of the system that exists to stop the rest of the system from fooling itself.</p>
+    </div>
+    <div class="cards">
+      <div class="card reveal" style="background:var(--ink-2);border-color:var(--line-dark)">
+        <span class="tag" style="color:var(--brass-soft)">IMMUTABLE STORE</span>
+        <h3 style="color:var(--paper)">Data that cannot be quietly edited</h3>
+        <p style="color:#9FAFA8">Inputs are captured and fixed, so a result can always be traced back to exactly the data that produced it. There is no rewriting history to make a finding look better.</p>
+      </div>
+      <div class="card reveal" data-delay="1" style="background:var(--ink-2);border-color:var(--line-dark)">
+        <span class="tag" style="color:var(--brass-soft)">TRIAL LEDGER</span>
+        <h3 style="color:var(--paper)">Every trial recorded, win or lose</h3>
+        <p style="color:#9FAFA8">Verdict criteria are logged before the test runs and the outcome is logged after. Post-hoc stopping rules are forbidden, so the ledger is evidence rather than a curated highlight reel.</p>
+      </div>
+      <div class="card reveal" data-delay="2" style="background:var(--ink-2);border-color:var(--line-dark)">
+        <span class="tag" style="color:var(--brass-soft)">REPRODUCTION HARNESS</span>
+        <h3 style="color:var(--paper)">A result that cannot be reproduced does not count</h3>
+        <p style="color:#9FAFA8">Findings have to re-run and reproduce through a defined harness. Reproducibility is the price of being taken seriously inside the platform.</p>
+      </div>
+      <div class="card reveal" data-delay="3" style="background:var(--ink-2);border-color:var(--line-dark)">
+        <span class="tag" style="color:var(--brass-soft)">FAIL-CLOSED DESIGN</span>
+        <h3 style="color:var(--paper)">Errors resolve to caution, not optimism</h3>
+        <p style="color:#9FAFA8">When a component cannot parse or decide, it returns an explicit error state — never a quiet default that happens to flatter the result. Ambiguity is never allowed to drift positive.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA ENVIRONMENT -->
+<section>
+  <div class="wrap">
+    <div class="split flip">
+      <div class="split-media reveal">
+        <div class="aside-card">
+          <h3>Current data environment</h3>
+          <p>Research runs on open, public sources: regulatory filings, public end-of-day prices, public macro data, and Shariah-universe proxies. This is enough to produce valid rejections — and explicitly not enough to produce institutional acceptance.</p>
+          <div class="stamp">◦ R-2A · OPEN DATA · REJECTION-CAPABLE</div>
+        </div>
+      </div>
+      <div class="split-text reveal" data-delay="1">
+        <span class="eyebrow">Data environment</span>
+        <h2 style="font-size:clamp(28px,4vw,42px);margin-top:16px">Built to grow into stronger data — never to pretend it already has.</h2>
+        <p class="lede" style="margin-top:20px">The platform is structured so that the move to point-in-time institutional data is a deliberate, gated decision rather than an assumption baked into today's results.</p>
+        <p class="muted">Until that gate is opened, the honest position is that ASQIOS can rule strategies out, refine its machinery, and prove its own reproducibility — while reserving any institutional-grade verdict for institutional-grade data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2 class="reveal">The structure only works because the governance is real.</h2>
+    <div class="hero-actions reveal">
+      <a href="governance.html" class="btn btn-solid">Governance &amp; Shariah <span class="arr">→</span></a>
+      <a href="about.html" class="btn btn-outline">About ASQIOS</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-col"><a href="index.html" class="brand" style="margin-bottom:18px">ASQ<b>IOS</b></a><p>A Shariah-compliant quantitative investment research platform. Governance-first, falsifiable, and operating entirely before capital deployment.</p></div>
+      <div class="foot-col"><h4>Explore</h4><a href="approach.html">Approach</a><a href="platform.html">Platform</a><a href="governance.html">Governance</a><a href="about.html">About</a></div>
+      <div class="foot-col"><h4>Contact</h4><a href="contact.html">Research enquiries</a><a href="mailto:contact@asqios.com">contact@asqios.com</a></div>
+    </div>
+    <p class="disclaimer"><span class="void">VOID FOR CAPITAL.</span> ASQIOS is a quantitative investment <em>research</em> platform operating prior to capital deployment. Nothing on this website constitutes investment advice, a recommendation, a solicitation, or an offer to buy or sell any security or to manage capital on behalf of any person. Research outputs are provisional, may be incorrect, and are published to be examined and falsified. Shariah compliance is assessed under an AAOIFI-primary methodology and remains subject to the rulings of the Shariah Supervisory Authority. Past or hypothetical results are not indicative of future outcomes.</p>
+    <p class="copy">© <span data-year></span> ASQIOS · Research instrument · All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
