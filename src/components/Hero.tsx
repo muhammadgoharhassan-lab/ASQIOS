@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Network } from "lucide-react";
 import { IntelligenceOrb } from "@/components/IntelligenceOrb";
 import { ParticleField } from "@/components/ParticleField";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Container } from "@/components/ui/Container";
 import { ORB_LABELS, SITE } from "@/lib/site";
 import { EASE } from "@/lib/motion";
@@ -108,7 +109,9 @@ export function Hero() {
 function OrbStage() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[520px]">
-      <IntelligenceOrb />
+      <ErrorBoundary>
+        <IntelligenceOrb />
+      </ErrorBoundary>
 
       {/* Orbiting labels — slow rotation, text counter-rotated to stay upright */}
       <div className="pointer-events-none absolute inset-0 motion-safe:animate-[spin_44s_linear_infinite]">

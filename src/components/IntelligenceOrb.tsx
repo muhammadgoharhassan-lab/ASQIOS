@@ -1,20 +1,42 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+
+/** Detects whether a WebGL context can actually be created in this browser. */
+function webglAvailable() {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Interactive 3D "Intelligence Orb" rendered with raw Three.js for a minimal
  * bundle footprint. A wireframe icosahedron sits inside an orbiting particle
  * shell with an ambient core glow; the whole rig rotates slowly and reacts
  * subtly to pointer movement. Honors prefers-reduced-motion.
+ *
+ * If WebGL is unavailable or context creation fails, it degrades gracefully to
+ * an elegant CSS fallback rather than crashing the page.
  */
 export function IntelligenceOrb() {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
+
+    if (!webglAvailable()) {
+      setFailed(true);
+      return;
+    }
 
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -24,11 +46,19 @@ export function IntelligenceOrb() {
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
     camera.position.z = 6.4;
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance",
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      // Context creation can still throw even when detection passes — never
+      // let this take down the React tree.
+      setFailed(true);
+      return;
+    }
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mount.appendChild(renderer.domElement);
@@ -175,7 +205,59 @@ export function IntelligenceOrb() {
     };
   }, []);
 
-  return <div ref={mountRef} className="absolute inset-0" aria-hidden />;
+  return (
+    <div className="absolute inset-0" aria-hidden>
+      {failed && <OrbFallback />}
+      <div ref={mountRef} className="absolute inset-0" />
+    </div>
+  );
+}
+
+/** Pure-CSS/SVG orb shown when WebGL is unavailable — keeps the hero intact. */
+function OrbFallback() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute h-3/4 w-3/4 rounded-full bg-radial-glow" />
+      <svg viewBox="0 0 200 200" className="relative h-3/4 w-3/4">
+        <defs>
+          <radialGradient id="orbCore" cx="50%" cy="45%" r="55%">
+            <stop offset="0%" stopColor="rgba(120,170,255,0.5)" />
+            <stop offset="60%" stopColor="rgba(79,140,255,0.08)" />
+            <stop offset="100%" stopColor="rgba(79,140,255,0)" />
+          </radialGradient>
+        </defs>
+        <circle cx="100" cy="100" r="78" fill="url(#orbCore)" />
+        {[78, 60, 42].map((r, i) => (
+          <circle
+            key={r}
+            cx="100"
+            cy="100"
+            r={r}
+            fill="none"
+            stroke={i === 2 ? "rgba(212,175,55,0.35)" : "rgba(79,140,255,0.28)"}
+            strokeWidth="0.6"
+            strokeDasharray={i === 0 ? "2 3" : undefined}
+            className="motion-safe:animate-[spin_50s_linear_infinite]"
+            style={{ transformOrigin: "100px 100px" }}
+          />
+        ))}
+        {Array.from({ length: 16 }).map((_, i) => {
+          const a = (i / 16) * Math.PI * 2;
+          return (
+            <circle
+              key={i}
+              cx={100 + Math.cos(a) * 78}
+              cy={100 + Math.sin(a) * 78}
+              r="1.1"
+              fill="#9fb6e0"
+              opacity="0.7"
+            />
+          );
+        })}
+        <circle cx="100" cy="100" r="3" fill="#4F8CFF" />
+      </svg>
+    </div>
+  );
 }
 
 /** Builds a soft radial-gradient texture used for the additive core glow. */
