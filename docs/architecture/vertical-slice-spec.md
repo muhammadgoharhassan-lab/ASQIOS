@@ -1,7 +1,8 @@
-# Lumina — V1 Vertical-Slice Spec
+# Lumina — V1 Vertical-Slice Spec (FINAL — for implementation approval)
 
-**Status:** design only (no code, schemas, or migrations) · **Depends on:**
-[Architecture Freeze](./lumina-architecture-freeze.md)
+**Status:** FINAL design (v1.0) — design only, no code/schemas/migrations · **Depends on:**
+[Architecture Freeze](./lumina-architecture-freeze.md) ·
+[Global-Readiness Audit](./global-readiness-audit.md)
 
 ## Purpose
 
@@ -10,6 +11,11 @@ slice is deliberately one ticker wide and full-stack deep: price capture, fundam
 normalization, validation, certification, a live research-grade Shariah screen, and a reproducible
 audit trail. If the slice holds, the architecture is sound and breadth is mechanical. If it breaks,
 it breaks cheaply, here, before scale.
+
+The slice runs on a **US (S&P 500) security**, but per the Global-Readiness Audit it writes
+**global-ready record shapes** (canonical concepts, currency, exchange/calendar, neutral identity,
+scheme-tagged classification) filled with US values — so adding Europe/Japan/China/GCC/Saudi later
+is data, not redesign.
 
 This spec is the contract the first implementation must satisfy. It is not code.
 
@@ -24,7 +30,19 @@ financial facts, one AAOIFI-compatible research-grade screen, and the full trust
 
 **Out (deferred to breadth/V2):** the full universe, restatement intelligence, full statement
 reconstruction, paid vendors, additional methodologies, counterfactual *product*, scholar workflow,
-object storage / PostgreSQL migration.
+object storage / PostgreSQL migration, non-US markets, multilingual text processing, FX conversion.
+
+**Global-ready shapes required even in the US slice (GR-1…GR-7):**
+
+| Record | Required global-ready fields (US values in V1) |
+|--------|-----------------------------------------------|
+| Identity | neutral internal entity/security ID + **LEI** anchor; CIK/ticker as attributes (GR-2) |
+| Price | `exchange`, `calendar_ref`, **`currency` = USD** (GR-4, GR-5) |
+| Financial fact | **`canonical_concept`** (us-gaap→canonical mapping), **`currency`**, `accounting_standard` = US-GAAP (GR-1, GR-4, GR-7) |
+| Classification | `(scheme = SIC, code)` → **canonical sector** (GR-3) |
+| Any free text | `language` = en (GR-6) |
+
+These columns exist and are populated in V1; only their *values* are US-specific.
 
 ---
 
@@ -70,9 +88,11 @@ object storage / PostgreSQL migration.
 - **Reconcile** the two sources (capture-now / reconcile-later is allowed; here we reconcile in the
   slice to exercise the path). Discrepancies are recorded, not silently resolved.
 - Produce a **bitemporal** curated price record: `valid_time` = the market day, `knowledge_time` =
-  when captured. Append-only.
+  when captured. Append-only. The record carries `exchange`, `calendar_ref`, and `currency` (=USD in
+  V1); the security is referenced by **neutral ID** (LEI/ticker as attributes), per GR-2/4/5.
 
-**Proves:** multi-source capture, tiering, adapter contract, CAS/WORM, bitemporality, reconciliation.
+**Proves:** multi-source capture, tiering, adapter contract, CAS/WORM, bitemporality, reconciliation,
+global-ready price/identity shape.
 
 ### 2. Fundamentals (broad normalized facts)
 
@@ -80,21 +100,26 @@ object storage / PostgreSQL migration.
 - **Normalize a broad set of financial facts** (per decision D1 — broad concept coverage, shallow
   depth; *not* a methodology-specific extraction). The Shariah screen will later consume from this
   general fact layer, never reach into XBRL itself.
+- Each fact keys to a **`canonical_concept`** via a versioned **us-gaap→canonical mapping adapter**
+  (GR-1) — raw us-gaap names are never the key — and carries **`currency`** (GR-4) and
+  `accounting_standard` = US-GAAP (GR-7). The us-gaap mapping is one adapter; IFRS/EDINET/CAS/SOCPA
+  adapters slot in later with no fact-store change.
 - Each fact is **bitemporal** and carries provenance to its **filing version** (so a future
   restatement produces a new fact + a new downstream decision, never an overwrite).
 - Validate facts (structural validity, basic invariants); fail-closed on anomalies.
 
-**Proves:** EDGAR capture, broad normalization, fact-layer reuse, filing-version provenance,
-bitemporal facts, validation.
+**Proves:** EDGAR capture, broad normalization, **canonical-concept layer** (taxonomy-neutral),
+fact-layer reuse, filing-version provenance, bitemporal facts, validation.
 
 ### 3. Classification
 
 - Derive sector/business-activity classification from **EDGAR SIC** (primary); capture the business
-  description as secondary signal (no NLP in V1).
-- Store as a **versioned, bitemporal, methodology-independent** classification record. It is an
-  input to screening, never owned by the methodology.
+  description (with `language` = en, GR-6) as secondary signal (no NLP in V1).
+- Store as a **versioned, bitemporal, methodology-independent** record carrying **`(scheme = SIC,
+  code)` mapped to a canonical sector** (GR-3); the methodology screens against canonical, never SIC
+  directly, so a NACE/TSE-33/CSRC/Tadawul scheme slots in by mapping alone.
 
-**Proves:** classification subsystem is replaceable and methodology-independent.
+**Proves:** classification subsystem is replaceable, methodology-independent, and **scheme-neutral**.
 
 ### 4. Certification (data)
 
@@ -171,6 +196,12 @@ bitemporal facts, validation.
    for SQLite-specific calls outside the storage adapter returns nothing.
 9. **Layer boundary:** no Shariah judgment is written into any Core fact table; judgments live only
    in the Decision/Evidence ledgers.
+10. **Global-ready shapes (GR-1…GR-7):** facts carry `canonical_concept` + `currency` +
+    `accounting_standard`; prices carry `exchange` + `calendar_ref` + `currency`; identity resolves
+    through a neutral ID with LEI/ticker as attributes; classification is `(scheme, code) →
+    canonical`; text carries `language`. A **second-taxonomy mapping stub** (e.g. a tiny IFRS→
+    canonical fixture for one concept) resolves to the same `canonical_concept` as its us-gaap
+    counterpart — proving the fact store is taxonomy-neutral **without** adding a real market.
 
 ---
 
@@ -190,4 +221,27 @@ bitemporal facts, validation.
 
 Once the slice passes all acceptance criteria, breadth becomes mechanical: widen capture to the
 S&P 500 universe, broaden the normalized fact set, and let the same trust spine carry it. The
-architecture, not the volume, is what the slice de-risks.
+architecture, not the volume, is what the slice de-risks. Adding a non-US market then reduces to
+writing a filing-source adapter + a taxonomy/classification mapping — no schema or engine change,
+as verified in the Global-Readiness Audit.
+
+---
+
+## Implementation approval
+
+This is the **final pre-implementation artifact**. Approving it authorizes building the slice — and
+only the slice — to satisfy the ten acceptance criteria above. Recommended build order:
+
+1. Storage abstractions + CAS/WORM + bitemporal store (the spine everything writes through).
+2. Price adapters (Stooq, Yahoo) → capture → reconcile → curated price.
+3. EDGAR adapter → XBRL capture → us-gaap→canonical mapping → broad facts → validation.
+4. Classification (SIC→canonical) + identity (neutral ID + LEI).
+5. Data certification gate → `dataset_version`.
+6. Methodology registry + "AAOIFI-compatible v0.1" governed config (provisional).
+7. Evidence bundle → L-METRIC → L-JUDGE → decision validation → confidence → research-grade cert →
+   decision + evidence ledgers.
+8. As-of query + determinism check + the audit-trail and global-shape assertions.
+
+**Open approval question:** the single reference security for the slice (any S&P 500 constituent
+with clean recent 10-K XBRL — e.g. a large-cap industrial — suffices; the choice is illustrative,
+not architectural).

@@ -140,8 +140,33 @@ consolidated outcome.
 
 ---
 
+## Global-readiness invariants (additive — see [Global-Readiness Audit](./global-readiness-audit.md))
+
+A US-centric audit of this freeze found seven implicit US assumptions, concentrated in the
+financial-facts layer. They are made explicit here as **additive** invariants — none changes a
+frozen decision; together they guarantee that Europe, Japan, China, GCC, and Saudi are added by
+**adapters and mappings, not redesign**. V1 fills these shapes with US values; the *shapes* are
+global from the first commit.
+
+- **GR-1 — Canonical concept model.** Facts key to a Lumina-canonical concept vocabulary; external
+  taxonomies (us-gaap, IFRS, ESEF, EDINET, China CAS, SOCPA) enter via versioned mapping adapters.
+  Raw us-gaap concept names are never the fact key.
+- **GR-2 — Source-neutral identity.** Internal entity/security IDs anchored by **LEI**; CIK, ISIN,
+  SEDOL, tickers, and local codes are attributes, not the spine.
+- **GR-3 — Scheme-tagged classification.** Classification carries `(scheme, code)` mapped to a
+  canonical sector taxonomy; methodologies bind to canonical, never to SIC directly.
+- **GR-4 — Currency as first-class.** Every monetary fact/price carries its currency; FX is a
+  derived/Research concern, never written into Core facts.
+- **GR-5 — Calendar & period neutrality.** Trading calendars are per-exchange (e.g. Tadawul trades
+  **Sun–Thu**); the fiscal-period model assumes no fixed frequency, week shape, or year-end.
+- **GR-6 — Language-tagged text.** Free-text fields carry a language tag; multilingual processing is
+  a later maturity, but the shape never assumes English.
+- **GR-7 — Accounting-standard awareness.** Canonical mappings and methodology base definitions may
+  be parameterized by accounting standard (GAAP / IFRS / JP-GAAP / CAS / SOCPA).
+
 ## Next artifact
 
 The next deliverable is **still design, not code**: the
 [single vertical-slice spec](./vertical-slice-spec.md), which proves every frozen invariant
-end-to-end on one security before any breadth build-out.
+(including GR-1…GR-7's global record shapes) end-to-end on one security before any breadth
+build-out.
