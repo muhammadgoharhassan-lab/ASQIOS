@@ -92,6 +92,13 @@ const structuredData = {
   description: SITE.description,
   slogan: SITE.tagline,
   email: SITE.email,
+  telephone: SITE.phone,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: SITE.phone,
+    email: SITE.email,
+    contactType: "customer support",
+  },
   sameAs: [SITE.linkedin],
   knowsAbout: [
     "Investment Research",

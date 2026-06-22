@@ -12,6 +12,8 @@ export const SITE = {
   description:
     "ASQIOS is an AI-native Shariah-compliant investment intelligence and research platform — combining research, governance, artificial intelligence, and disciplined decision frameworks.",
   email: "contact@asqios.com",
+  phone: "+966530635533",
+  phoneDisplay: "+966 53 063 5533",
   linkedin: "https://www.linkedin.com/company/asqios",
 } as const;
 

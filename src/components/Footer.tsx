@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Linkedin, ArrowUpRight } from "lucide-react";
+import { Mail, Linkedin, Phone, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SITE, FOOTER_GROUPS, DEFINITION } from "@/lib/site";
 import { fadeUp, viewportOnce } from "@/lib/motion";
@@ -34,6 +34,15 @@ export function Footer() {
             >
               <span className="inline-flex items-center gap-2">
                 <Mail size={15} /> {SITE.email}
+              </span>
+              <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+            <a
+              href={`tel:${SITE.phone}`}
+              className="group inline-flex items-center justify-between gap-6 rounded-full glass px-6 py-3.5 font-mono text-xs uppercase tracking-widest text-ink transition-all hover:border-azure/40 hover:shadow-glow"
+            >
+              <span className="inline-flex items-center gap-2">
+                <Phone size={15} className="text-azure" /> {SITE.phoneDisplay}
               </span>
               <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
